@@ -24,6 +24,9 @@ async def on_ready():
     opus_lib_name = ctypes.util.find_library('opus')
     if not discord.opus.is_loaded():
         discord.opus.load_opus(opus_lib_name)
+    if not os.path.exists('soundboard/'):
+        print('ERROR: Please setup a soundboard directory. Read the README!')
+        return
 
     # load sounds into memory
     await enumerate_sounds()
