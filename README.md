@@ -1,5 +1,6 @@
 # SoundBot
-SoundBot is a containerized soundboard for Discord.
+SoundBot is a containerized soundboard for Discord. The soundbot image is hosted on [Dockerhub](https://hub.docker.com/repository/docker/wallsofcode/soundbot).
+It can be pulled to your local machine by running _"docker pull wallsofcode/soundbot"_.
 
 ## How to use SoundBot
 Build and run the docker container with the following environment variables set:
