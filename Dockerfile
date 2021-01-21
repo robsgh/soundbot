@@ -11,6 +11,6 @@ RUN apt update \
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-COPY . ./
+COPY soundbot.py /app/soundbot.py
 
 CMD [ "python", "/app/soundbot.py" ]
