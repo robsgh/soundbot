@@ -1,0 +1,11 @@
+version: "3"
+services:
+  soundbot:
+    build: .
+    image: "wallsofcode/soundbot:latest"
+    volumes:
+      - ./soundboard:/app/soundboard
+    environment:
+      - SOUNDBOT_TOKEN=YOURDISCORDTOKENHERE
+      #- SOUNDBOT_PREFIX=;
+      #- SOUNDBOT_ACTIVITY=STATUS

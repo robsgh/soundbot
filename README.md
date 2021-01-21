@@ -8,6 +8,9 @@ Build and run the docker container with the following environment variables set:
 * SOUNDBOT_PREFIX: The command prefix for the soundboard. The default is ';'.
 * SOUNDBOT_ACTIVITY: The activity string for the bot user. This defaults to the help message.
 
+If docker-compose is your cup of tea, I've included a very simple example file named _example-soundbot-compose.yaml_ 
+which will get you up and running quickly. Make sure to change your API token in the file!
+
 ## Adding Sounds
 Begin by collecting MP3 sounds you would like to use in the SoundBot in a folder. 
 
