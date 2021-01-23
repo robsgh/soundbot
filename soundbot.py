@@ -120,20 +120,42 @@ async def on_message(message):
         await message.channel.send('You are not in a voice channel!')
     else:
         # slice off the command prefix
-        cmd = message.content[1:]
+        cmd = message.content[len(SOUNDBOT_PREFIX):]
         for name in soundfiles:
             # if a file in the soundboard matches the command sent
             if name == cmd:
-                print('Playing sound: {}'.format(cmd))
-                vc = await message.author.voice.channel.connect()
-                if not vc.is_connected():
-                    return
-                audio_source = discord.FFmpegPCMAudio('soundboard/{filename}.mp3'.format(filename=name))
-                vc.play(audio_source)
+                print('Queueing sound: {}'.format(cmd))
+
+                # attempt to reuse a vc if possible, otherwise join the vc if disconnected
+                vc = None
+                if len(bot.voice_clients) > 0:
+                    # wait for all voice clients in the bot to stop playing
+                    for bvc in bot.voice_clients:
+                        while bvc.is_playing():
+                            await asyncio.sleep(0.1)
+                        # keep track of the vc
+                        vc = bvc
+                else:
+                    # no previous vcs, join a new voice channel
+                    vc = await message.author.voice.channel.connect()
+
+                # create and play the sound through ffmpeg
+                sound = discord.FFmpegPCMAudio('soundboard/{filename}.mp3'.format(filename=name))
+                vc.play(sound)
+
+                # stall while playing
                 while vc.is_playing():
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.1)
+
+                # stop playing after finishing the sound
                 vc.stop()
-                await vc.disconnect()
+
+                # wait a bit, and if no new sounds are playing disconnect from voice
+                await asyncio.sleep(1)
+                if len(bot.voice_clients) > 0 and not bot.voice_clients[0].is_playing():
+                    await vc.disconnect()
+
+
 if SOUNDBOT_TOKEN:
     bot.run(SOUNDBOT_TOKEN)
 else:
